@@ -78,12 +78,11 @@ convert();
 
 ## 🧪 Examples
 
-| Input | Rendered Result |
+| Description | Rendered Result |
 | :--- | :--- |
-| `Euler's Identity: $e^{i\pi} + 1 = 0$` | ![Example](https://via.placeholder.com/400x100?text=Euler's+Identity) |
-| `Matrix: $$\begin{pmatrix} a & b \\ c & d \end{pmatrix}$$` | ![Example](https://via.placeholder.com/200x150?text=Matrix) |
-
-*(Note: Replace placeholders with actual generated images in your live repo!)*
+| **Basic Math** (Inline + Block) | ![Basic Math](examples/basic_math.png) |
+| **Calculus** (Integrals) | ![Calculus](examples/complex_calculus.png) |
+| **Linear Algebra** (Matrices) | ![Matrix Algebra](examples/matrix_algebra.png) |
 
 ---
 
