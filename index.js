@@ -28,7 +28,13 @@ async function latexToImage(text, outputPath, options = {}) {
     try {
         const page = await browser.newPage();
 
-        // HTML template with KaTeX and Google Fonts for robustness
+        // Initial large viewport
+        await page.setViewport({
+            width: fixedWidth || 2400,
+            height: 1200,
+            deviceScaleFactor: 2
+        });
+
         const html = `
 <!DOCTYPE html>
 <html>
@@ -44,23 +50,25 @@ async function latexToImage(text, outputPath, options = {}) {
             margin: 0; 
             padding: 0; 
             background-color: ${backgroundColor === 'transparent' ? 'transparent' : backgroundColor};
-            overflow: hidden;
             -webkit-font-smoothing: antialiased;
+            display: inline-block; /* Allow body to wrap content */
         }
         #container {
-            display: ${fixedWidth ? 'block' : 'inline-block'};
-            width: ${fixedWidth ? fixedWidth + 'px' : 'auto'};
+            display: inline-block;
+            min-width: ${fixedWidth ? fixedWidth + 'px' : 'auto'};
             padding: ${padding}px;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             font-size: ${fontSize}px;
             line-height: 1.6;
             color: #1a1a1a;
             box-sizing: border-box;
+            overflow: visible;
         }
         #content { 
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+        .katex-display { margin: 0.5em 0; overflow-x: visible; overflow-y: hidden; }
     </style>
 </head>
 <body>
@@ -77,14 +85,37 @@ async function latexToImage(text, outputPath, options = {}) {
                     {left: '$$', right: '$$', display: true},
                     {left: '$', right: '$', display: false},
                     {left: '\\\\(', right: '\\\\)', display: false},
-                    {left: '\\\\[', right: '\\\\]', display: true}
+                    {left: '\\\\[', right: '\\\\\]', display: true}
                 ],
                 throwOnError : false
             });
-            // Wait for fonts to be ready
             await document.fonts.ready;
-            // Additional wait for KaTeX to finish any internal processing
-            return true;
+            
+            // Wait a tiny bit for KaTeX to finish layout
+            await new Promise(r => setTimeout(r, 50));
+
+            const container = document.getElementById('container');
+            
+            // Expand viewport to measure full content
+            const allElements = container.querySelectorAll('*');
+            let maxRight = 0;
+            let maxBottom = 0;
+            
+            allElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.right > maxRight) maxRight = rect.right;
+                if (rect.bottom > maxBottom) maxBottom = rect.bottom;
+            });
+            
+            // Fallback to container dimensions if no children found
+            const containerRect = container.getBoundingClientRect();
+            maxRight = Math.max(maxRight, containerRect.right);
+            maxBottom = Math.max(maxBottom, containerRect.bottom);
+
+            return {
+                width: maxRight,
+                height: maxBottom
+            };
         };
     </script>
 </body>
@@ -92,27 +123,19 @@ async function latexToImage(text, outputPath, options = {}) {
 
         await page.setContent(html);
 
-        // Wait for KaTeX scripts and fonts
         await page.waitForFunction(() => typeof renderMathInElement !== 'undefined');
-        await page.evaluate(() => window.renderMath());
+        const dimensions = await page.evaluate(() => window.renderMath());
         
-        // Wait an extra bit for layout to settle
-        await new Promise(r => setTimeout(r, 100));
-
-        // Select the container element
-        const element = await page.$('#container');
-        const boundingBox = await element.boundingBox();
-        
-        if (!boundingBox) {
-            throw new Error('Could not calculate bounding box of content');
-        }
-
+        // Match viewport to content
         await page.setViewport({
-            width: Math.ceil(boundingBox.width) || 800,
-            height: Math.ceil(boundingBox.height) || 600,
+            width: Math.ceil(dimensions.width),
+            height: Math.ceil(dimensions.height),
             deviceScaleFactor: 2
         });
 
+        await new Promise(r => setTimeout(r, 150));
+
+        const element = await page.$('#container');
         await element.screenshot({
             path: outputPath,
             omitBackground: backgroundColor === 'transparent'

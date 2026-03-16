@@ -83,6 +83,10 @@ convert();
 | **Basic Math** (Inline + Block) | ![Basic Math](examples/basic_math.png) |
 | **Calculus** (Integrals) | ![Calculus](examples/complex_calculus.png) |
 | **Linear Algebra** (Matrices) | ![Matrix Algebra](examples/matrix_algebra.png) |
+| **Physics** (Standard Model) | ![Physics](examples/physics.png) |
+| **Chemistry** (Reactions) | ![Chemistry](examples/chemistry.png) |
+| **Stress Test** (Overflow/Wide) | ![Wide Equation](examples/wide_alphabet.png) |
+| **Multi-line** (Lists/Notes) | ![Multi-line](examples/multi_line.png) |
 
 ---
 
@@ -92,4 +96,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Created by [Praj Dabre](mailto:prajdabre@gmail.com)
+Created by [Raj Dabre](mailto:prajdabre@gmail.com)
