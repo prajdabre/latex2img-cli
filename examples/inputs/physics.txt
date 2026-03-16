@@ -1,0 +1,1 @@
+Physics: $$\mathcal{L} = -\frac{1}{4}F_{\mu\nu}F^{\mu\nu} + i\bar{\psi}\cancel{D}\psi + h.c. + \bar{\psi}_i y_{ij} \psi_j \phi + h.c. + |D_\mu \phi|^2 - V(\phi)$$ Surface area: $$\oint_S \mathbf{E} \cdot d\mathbf{A} = \frac{Q}{\varepsilon_0}$$

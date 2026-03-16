@@ -78,15 +78,15 @@ convert();
 
 ## 🧪 Examples
 
-| Description | Rendered Result |
-| :--- | :--- |
-| **Basic Math** (Inline + Block) | ![Basic Math](examples/basic_math.png) |
-| **Calculus** (Integrals) | ![Calculus](examples/complex_calculus.png) |
-| **Linear Algebra** (Matrices) | ![Matrix Algebra](examples/matrix_algebra.png) |
-| **Physics** (Standard Model) | ![Physics](examples/physics.png) |
-| **Chemistry** (Reactions) | ![Chemistry](examples/chemistry.png) |
-| **Stress Test** (Overflow/Wide) | ![Wide Equation](examples/wide_alphabet.png) |
-| **Multi-line** (Lists/Notes) | ![Multi-line](examples/multi_line.png) |
+| Description | Rendered Result | Input Text |
+| :--- | :--- | :--- |
+| **Basic Math** (Inline + Block) | ![Basic Math](examples/basic_math.png) | [Link](examples/inputs/basic_math.txt) |
+| **Calculus** (Integrals) | ![Calculus](examples/complex_calculus.png) | [Link](examples/inputs/complex_calculus.txt) |
+| **Linear Algebra** (Matrices) | ![Matrix Algebra](examples/matrix_algebra.png) | [Link](examples/inputs/matrix_algebra.txt) |
+| **Physics** (Standard Model) | ![Physics](examples/physics.png) | [Link](examples/inputs/physics.txt) |
+| **Chemistry** (Reactions) | ![Chemistry](examples/chemistry.png) | [Link](examples/inputs/chemistry.txt) |
+| **Stress Test** (Overflow/Wide) | ![Wide Equation](examples/wide_alphabet.png) | [Link](examples/inputs/wide_alphabet.txt) |
+| **Multi-line** (Lists/Notes) | ![Multi-line](examples/multi_line.png) | [Link](examples/inputs/multi_line.txt) |
 
 ---
 

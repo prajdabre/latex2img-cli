@@ -1,0 +1,1 @@
+Calculus example: $$\int_{0}^{\infty} \frac{\sin x}{x} dx = \frac{\pi}{2}$$

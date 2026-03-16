@@ -1,0 +1,1 @@
+Chemical reaction: $$\text{CH}_4 + 2\text{O}_2 \rightarrow \text{CO}_2 + 2\text{H}_2\text{O} \qquad \Delta H = -891 \text{ kJ/mol}$$

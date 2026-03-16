@@ -1,0 +1,1 @@
+Matrix multiplication: $$\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} \begin{pmatrix} a \\ b \end{pmatrix} = \begin{pmatrix} a+2b \\ 3a+4b \end{pmatrix}$$
