@@ -1,0 +1,21 @@
+{
+  "name": "latex2img-cli",
+  "version": "1.0.0",
+  "description": "A high-quality LaTeX to image conversion tool and library using Puppeteer and KaTeX.",
+  "main": "index.js",
+  "bin": {
+    "latex2img": "./bin.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Raj Dabre <prajdabre@gmail.com>",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "commander": "^14.0.3",
+    "katex": "^0.16.38",
+    "puppeteer": "^24.39.1"
+  }
+}
