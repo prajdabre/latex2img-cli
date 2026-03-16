@@ -45,14 +45,22 @@ After linking, you can use the `latex2img` command:
 latex2img 'The mass-energy equivalence: $E = mc^2$' -o output.png -s 32 -w 600
 ```
 
-#### Options:
-| Flag | Description | Default |
+### Options
+
+- `-o, --output <path>`: Output image path (default: `output.png`)
+- `-s, --font-size <number>`: Font size in pixels (default: `24`)
+- `-p, --padding <number>`: Padding in pixels (default: `20`)
+- `-w, --width <number>`: Fixed width for text wrapping
+- `-b, --background <color>`: Custom background color (CSS value)
+- `-t, --theme <name>`: Theme choice (`modern`, `handwritten`, `chalkboard`)
+
+### 🎨 Themes
+
+| Theme | Description | Preview |
 | :--- | :--- | :--- |
-| `-o, --output` | Path to save the output image | `output.png` |
-| `-s, --font-size` | Base font size (px) | `24` |
-| `-p, --padding` | Padding around content (px) | `20` |
-| `-w, --width` | Fixed width for content wrapping | `auto` |
-| `-b, --background` | Background color (hex or name) | `white` |
+| `modern` (default) | Clean, professional Inter font on white/transparent background. | [View](examples/basic_math.png) |
+| `handwritten` | Organic "Architects Daughter" font with a slight tilt and ink-blue color. | [View](examples/handwritten_secret.png) |
+| `chalkboard` | Classroom aesthetic with "Patrick Hand" font and slate-board background. | [View](examples/chalkboard_lesson.png) |
 
 ### 2. Node.js Library
 

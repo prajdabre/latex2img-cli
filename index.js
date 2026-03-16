@@ -11,19 +11,46 @@ const path = require('path');
  * @param {number} options.fontSize - Font size in pixels (default: 24).
  * @param {string} options.backgroundColor - Background color (default: 'white').
  * @param {number} options.width - Optional fixed width in pixels.
+ * @param {string} options.theme - Theme: 'modern', 'handwritten', or 'chalkboard' (default: 'modern').
  */
 async function latexToImage(text, outputPath, options = {}) {
     const {
         padding = 20,
         fontSize = 24,
-        backgroundColor = 'white',
-        width: fixedWidth
+        backgroundColor: userBgColor,
+        width: fixedWidth,
+        theme = 'modern'
     } = options;
 
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         headless: true
     });
+
+    // Theme configurations
+    const themes = {
+        modern: {
+            bg: userBgColor || 'white',
+            color: '#1a1a1a',
+            font: "'Inter', sans-serif",
+            googleFont: "Inter:wght@400;500;600"
+        },
+        handwritten: {
+            bg: userBgColor || '#fffdf5', // Creamy paper look
+            color: '#1a2a4a', // Ink blue
+            font: "'Architects Daughter', cursive",
+            googleFont: "Architects+Daughter"
+        },
+        chalkboard: {
+            bg: userBgColor || '#2c3e50', // Slate blue/dark
+            color: '#ffffff', // Chalk white
+            font: "'Patrick Hand', cursive",
+            googleFont: "Patrick+Hand"
+        }
+    };
+
+    const activeTheme = themes[theme] || themes.modern;
+    const backgroundColor = activeTheme.bg;
 
     try {
         const page = await browser.newPage();
@@ -41,7 +68,7 @@ async function latexToImage(text, outputPath, options = {}) {
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=${activeTheme.googleFont}&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -51,26 +78,33 @@ async function latexToImage(text, outputPath, options = {}) {
             padding: 0; 
             background-color: ${backgroundColor === 'transparent' ? 'transparent' : backgroundColor};
             -webkit-font-smoothing: antialiased;
-            display: inline-block; /* Allow body to wrap content */
+            display: inline-block;
         }
         #container {
             display: inline-block;
             min-width: ${fixedWidth ? fixedWidth + 'px' : 'auto'};
             padding: ${padding}px;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: ${activeTheme.font};
             font-size: ${fontSize}px;
             line-height: 1.6;
-            color: #1a1a1a;
+            color: ${activeTheme.color};
             box-sizing: border-box;
             overflow: visible;
+            ${theme === 'handwritten' ? 'transform: rotate(-0.2deg);' : ''}
+            ${theme === 'chalkboard' ? 'text-shadow: 1px 1px 2px rgba(255,255,255,0.2);' : ''}
         }
         #content { 
             white-space: pre-wrap;
             word-wrap: break-word;
+            filter: ${theme === 'handwritten' ? 'opacity(0.9) contrast(1.1) brightness(0.95)' : 'none'};
         }
         .katex-display { margin: 0.5em 0; overflow-x: visible; overflow-y: hidden; }
+        /* Soften the math to match handwriting theme */
+        ${theme === 'handwritten' ? '.katex { font-weight: 500; }' : ''}
+        ${theme === 'chalkboard' ? '.katex { opacity: 0.95; }' : ''}
     </style>
 </head>
+
 <body>
     <div id="container">
         <div id="content"></div>

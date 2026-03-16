@@ -13,7 +13,8 @@ program
   .option('-s, --font-size <number>', 'Font size', parseInt, 24)
   .option('-p, --padding <number>', 'Padding', parseInt, 20)
   .option('-w, --width <number>', 'Fixed width in pixels', parseInt)
-  .option('-b, --background <color>', 'Background color', 'white')
+  .option('-b, --background <color>', 'Background color')
+  .option('-t, --theme <string>', 'Theme (modern, handwritten, chalkboard)', 'modern')
   .action(async (input, options) => {
     let text = input;
     if (fs.existsSync(input)) {
@@ -28,7 +29,8 @@ program
             fontSize: options.fontSize,
             padding: options.padding,
             backgroundColor: options.background,
-            width: options.width
+            width: options.width,
+            theme: options.theme
         });
         console.log('Done!');
     } catch (err) {
