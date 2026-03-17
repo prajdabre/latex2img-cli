@@ -2,41 +2,56 @@ const latexToImage = require('../../index');
 const path = require('path');
 const fs = require('fs');
 
-async function generateChain() {
-    const steps = [
-        { label: 'original', text: 'Solve for x:\n$$2x + 5 = 10$$' },
-        { label: 'subtract', text: 'Subtract 5 from both sides:\n$$2x = 10 \\mathbin{\\textcolor{#3498db}{- 5}}$$' },
-        { label: 'simplify1', text: 'Simplify:\n$$2x = \\textcolor{#3498db}{5}$$' },
-        { label: 'divide', text: 'Divide by 2:\n$$x = \\textcolor{#3498db}{\\frac{5}{2}}$$' },
-        { label: 'final', text: 'Result:\n$$x = \\textcolor{#3498db}{2.5}$$' }
-    ];
+/**
+ * Renders a specific problem from a JSON file
+ * @param {string} jsonPath 
+ */
+async function processProblem(jsonPath) {
+    const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+    const problemName = path.basename(jsonPath, '.json');
+    const outputsBaseDir = path.join(__dirname, 'outputs', problemName);
 
-    const outputDir = path.join(__dirname, 'outputs');
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+    if (!fs.existsSync(outputsBaseDir)) {
+        fs.mkdirSync(outputsBaseDir, { recursive: true });
     }
 
-    console.log('Generating Chain of Thought sequence...');
-
-    for (let i = 0; i < steps.length; i++) {
-        const step = steps[i];
+    console.log(`\nProcessing Problem: ${problemName}`);
+    
+    for (let i = 0; i < data.steps.length; i++) {
+        const step = data.steps[i];
         const fileName = `step_${i}_${step.label}.png`;
-        const outputPath = path.join(outputDir, fileName);
+        const outputPath = path.join(outputsBaseDir, fileName);
 
-        console.log(`Rendering ${fileName}...`);
+        console.log(`  - Rendering ${fileName}...`);
         try {
             await latexToImage(step.text, outputPath, {
                 fontSize: 32,
                 padding: 40,
                 backgroundColor: '#ffffff',
-                width: 500
+                width: 600
             });
         } catch (error) {
             console.error(`Error at step ${i}:`, error);
         }
     }
-
-    console.log('\nSequence generated successfully in experimental/chain-of-thought/outputs/');
 }
 
-generateChain();
+async function run() {
+    const problemsDir = path.join(__dirname, 'problems');
+    
+    // Fallback if no problems folder exists yet
+    if (!fs.existsSync(problemsDir)) {
+        console.log('No problems/ folder found. Run the script with a JSON path or create the folder.');
+        return;
+    }
+
+    const files = fs.readdirSync(problemsDir).filter(f => f.endsWith('.json'));
+    
+    for (const file of files) {
+        await processProblem(path.join(problemsDir, file));
+    }
+
+    console.log('\nAll sequences generated in experimental/chain-of-thought/outputs/');
+}
+
+run();
