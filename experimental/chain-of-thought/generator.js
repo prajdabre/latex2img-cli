@@ -5,10 +5,10 @@ const fs = require('fs');
 async function generateChain() {
     const steps = [
         { label: 'original', text: 'Solve for x:\n$$2x + 5 = 10$$' },
-        { label: 'subtract', text: 'Subtract 5 from both sides:\n$$2x = 10 - 5$$' },
-        { label: 'simplify1', text: 'Simplify:\n$$2x = 5$$' },
-        { label: 'divide', text: 'Divide by 2:\n$$x = \\frac{5}{2}$$' },
-        { label: 'final', text: 'Result:\n$$x = 2.5$$' }
+        { label: 'subtract', text: 'Subtract 5 from both sides:\n$$2x = 10 \\mathbin{\\textcolor{#3498db}{- 5}}$$' },
+        { label: 'simplify1', text: 'Simplify:\n$$2x = \\textcolor{#3498db}{5}$$' },
+        { label: 'divide', text: 'Divide by 2:\n$$x = \\textcolor{#3498db}{\\frac{5}{2}}$$' },
+        { label: 'final', text: 'Result:\n$$x = \\textcolor{#3498db}{2.5}$$' }
     ];
 
     const outputDir = path.join(__dirname, 'outputs');
