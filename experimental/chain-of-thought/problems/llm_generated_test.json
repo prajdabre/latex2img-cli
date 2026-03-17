@@ -1,0 +1,24 @@
+{
+  "steps": [
+    {
+      "label": "setup",
+      "text": "Solve for x:\n$$5x + \\textcolor{#e67e22}{2} = 12$$"
+    },
+    {
+      "label": "action",
+      "text": "Subtract 2 from both sides to balance the equation:\n$$5x + 2 \\textcolor{#3498db}{- 2} = 12 \\textcolor{#3498db}{- 2}$$"
+    },
+    {
+      "label": "simplify",
+      "text": "Simplify the arithmetic:\n$$\\textcolor{#e67e22}{5}x = \\textcolor{#27ae60}{10}$$"
+    },
+    {
+      "label": "divide",
+      "text": "Divide by 5 to isolate x:\n$$x = \\textcolor{#3498db}{\\frac{10}{5}}$$"
+    },
+    {
+      "label": "final",
+      "text": "Result:\n$$x = \\textcolor{#27ae60}{2}$$"
+    }
+  ]
+}
