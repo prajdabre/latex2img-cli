@@ -1,0 +1,21 @@
+{
+  "text": "Grounded Equation: $$a^2 + b^2 = c^2$$",
+  "image": "grounded_eqn.png",
+  "groundingLevel": "equation",
+  "dimensions": {
+    "width": 811.21875,
+    "height": 337.734375
+  },
+  "boxes": [
+    {
+      "text": "a2+b2=c2a^2 + b^2 = c^2a2+b2=c2",
+      "box": [
+        20,
+        171,
+        696,
+        111
+      ],
+      "label": "equation"
+    }
+  ]
+}

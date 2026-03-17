@@ -53,8 +53,8 @@ latex2img 'The mass-energy equivalence: $E = mc^2$' -o output.png -s 32 -w 600
 - `-w, --width <number>`: Fixed width for text wrapping
 - `-b, --background <color>`: Custom background color (CSS value)
 - `-t, --theme <name>`: Theme choice (`modern`, `handwritten`, `chalkboard`)
-- `-g, --grounded`: Extract symbol-level bounding boxes to a `.json` file
-- `-d, --debug`: Visually render bounding boxes on the output image
+- `-g, --grounded [level]`: Extract boxes to `.json` (`char` or `equation`)
+- `-d, --debug [level]`: Render boxes on image (`char` or `equation`)
 
 ### 🔬 Grounded STEM Training Data
 

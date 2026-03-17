@@ -10,10 +10,10 @@ const path = require('path');
  * @param {number} options.padding - Padding around the content (default: 20).
  * @param {number} options.fontSize - Font size in pixels (default: 24).
  * @param {string} options.backgroundColor - Background color (default: 'white').
- * @param {number} options.width - Optional fixed width in pixels.
+ * @param {string} options.width - Optional fixed width in pixels.
  * @param {string} options.theme - Theme: 'modern', 'handwritten', or 'chalkboard' (default: 'modern').
- * @param {boolean} options.grounded - If true, extracts bounding boxes for every symbol (default: false).
- * @param {boolean} options.debug - If true, visually draws bounding boxes on the image (default: false).
+ * @param {boolean|string} options.grounded - Extraction level: 'char', 'equation', or false (default: false).
+ * @param {boolean|string} options.debug - Visual debug level: 'char', 'equation', or false (default: false).
  */
 async function latexToImage(text, outputPath, options = {}) {
     const {
@@ -155,7 +155,7 @@ async function latexToImage(text, outputPath, options = {}) {
             const result = {
                 width: maxRight,
                 height: maxBottom,
-                symbols: []
+                boxes: []
             };
 
             const drawBox = (rect, color, label) => {
@@ -184,15 +184,23 @@ async function latexToImage(text, outputPath, options = {}) {
                 container.appendChild(box);
             };
 
-            if (shouldGround || shouldDebug) {
-                // Grounding logic
+            const normalizeLevel = (raw) => {
+                if (raw === true || raw === 'char') return 'char';
+                if (raw === 'equation') return 'equation';
+                return 'none';
+            };
+
+            const gLevel = normalizeLevel(shouldGround);
+            const dLevel = normalizeLevel(shouldDebug);
+
+            if (gLevel === 'char' || dLevel === 'char') {
                 const elements = container.querySelectorAll('.katex .mord, .katex .mop, .katex .mbin, .katex .mrel, .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner');
                 elements.forEach(el => {
                     if (el.children.length === 0 && el.textContent.trim().length > 0) {
                         const rect = el.getBoundingClientRect();
                         if (rect.width > 0 && rect.height > 0) {
-                            if (shouldGround) {
-                                result.symbols.push({
+                            if (gLevel === 'char') {
+                                result.boxes.push({
                                     text: el.textContent.trim(),
                                     box: [
                                         Math.round(rect.left - containerRect.left),
@@ -200,24 +208,39 @@ async function latexToImage(text, outputPath, options = {}) {
                                         Math.round(rect.width),
                                         Math.round(rect.height)
                                     ],
-                                    type: Array.from(el.classList).find(c => c.startsWith('m')) || 'unknown'
+                                    label: Array.from(el.classList).find(c => c.startsWith('m')) || 'char'
                                 });
                             }
-                            if (shouldDebug) {
+                            if (dLevel === 'char') {
                                 drawBox(rect, 'rgba(231, 76, 60, 0.8)'); // Red for symbols
                             }
                         }
                     }
                 });
+            }
 
-                if (shouldDebug) {
-                    // Equation level grounding (blue boxes)
-                    const equations = container.querySelectorAll('.katex-display, .katex:not(.katex-display .katex)');
-                    equations.forEach(eq => {
-                        const rect = eq.getBoundingClientRect();
-                        drawBox(rect, 'rgba(52, 152, 219, 0.9)', 'equation');
-                    });
-                }
+            if (gLevel === 'equation' || dLevel === 'equation') {
+                const equations = container.querySelectorAll('.katex-display, .katex:not(.katex-display .katex)');
+                equations.forEach(eq => {
+                    const rect = eq.getBoundingClientRect();
+                    if (rect.width > 0 && rect.height > 0) {
+                        if (gLevel === 'equation') {
+                            result.boxes.push({
+                                text: eq.textContent.trim(),
+                                box: [
+                                    Math.round(rect.left - containerRect.left),
+                                    Math.round(rect.top - containerRect.top),
+                                    Math.round(rect.width),
+                                    Math.round(rect.height)
+                                ],
+                                label: 'equation'
+                            });
+                        }
+                        if (dLevel === 'equation') {
+                            drawBox(rect, 'rgba(52, 152, 219, 0.9)', 'equation');
+                        }
+                    }
+                });
             }
 
             return result;
@@ -247,13 +270,14 @@ async function latexToImage(text, outputPath, options = {}) {
         });
 
         // Save grounding data if requested
-        if (grounded && dimensions.symbols.length > 0) {
+        if (grounded && dimensions.boxes.length > 0) {
             const metadataPath = outputPath.replace(/\.[^/.]+$/, "") + ".json";
             fs.writeFileSync(metadataPath, JSON.stringify({
                 text,
                 image: path.basename(outputPath),
+                groundingLevel: grounded === true ? 'char' : grounded,
                 dimensions: { width: dimensions.width, height: dimensions.height },
-                symbols: dimensions.symbols
+                boxes: dimensions.boxes
             }, null, 2));
         }
 

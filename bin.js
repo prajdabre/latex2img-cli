@@ -15,8 +15,8 @@ program
   .option('-w, --width <number>', 'Fixed width in pixels', parseInt)
   .option('-b, --background <color>', 'Background color')
   .option('-t, --theme <string>', 'Theme (modern, handwritten, chalkboard)', 'modern')
-  .option('-g, --grounded', 'Export symbol bounding boxes to JSON', false)
-  .option('-d, --debug', 'Draw bounding boxes for debugging', false)
+  .option('-g, --grounded [level]', 'Export bounding boxes to JSON (char, equation)')
+  .option('-d, --debug [level]', 'Draw bounding boxes for debugging (char, equation)')
   .action(async (input, options) => {
     let text = input;
     if (fs.existsSync(input)) {
