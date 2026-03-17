@@ -15,6 +15,7 @@ program
   .option('-w, --width <number>', 'Fixed width in pixels', parseInt)
   .option('-b, --background <color>', 'Background color')
   .option('-t, --theme <string>', 'Theme (modern, handwritten, chalkboard)', 'modern')
+  .option('-g, --grounded', 'Export symbol bounding boxes to JSON', false)
   .action(async (input, options) => {
     let text = input;
     if (fs.existsSync(input)) {
@@ -30,7 +31,8 @@ program
             padding: options.padding,
             backgroundColor: options.background,
             width: options.width,
-            theme: options.theme
+            theme: options.theme,
+            grounded: options.grounded
         });
         console.log('Done!');
     } catch (err) {

@@ -1,0 +1,50 @@
+{
+  "text": "Matrix: $$\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}$$",
+  "image": "grounded_matrix.png",
+  "dimensions": {
+    "width": 493.6875,
+    "height": 436.265625
+  },
+  "symbols": [
+    {
+      "text": "a",
+      "box": [
+        66,
+        182,
+        46,
+        81
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "c",
+      "box": [
+        70,
+        287,
+        38,
+        81
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "b",
+      "box": [
+        203,
+        182,
+        37,
+        81
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "d",
+      "box": [
+        199,
+        287,
+        45,
+        81
+      ],
+      "type": "mord"
+    }
+  ]
+}

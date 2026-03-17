@@ -12,6 +12,7 @@ const path = require('path');
  * @param {string} options.backgroundColor - Background color (default: 'white').
  * @param {number} options.width - Optional fixed width in pixels.
  * @param {string} options.theme - Theme: 'modern', 'handwritten', or 'chalkboard' (default: 'modern').
+ * @param {boolean} options.grounded - If true, extracts bounding boxes for every symbol (default: false).
  */
 async function latexToImage(text, outputPath, options = {}) {
     const {
@@ -19,7 +20,8 @@ async function latexToImage(text, outputPath, options = {}) {
         fontSize = 24,
         backgroundColor: userBgColor,
         width: fixedWidth,
-        theme = 'modern'
+        theme = 'modern',
+        grounded = false
     } = options;
 
     const browser = await puppeteer.launch({
@@ -113,7 +115,7 @@ async function latexToImage(text, outputPath, options = {}) {
         const text = ${JSON.stringify(text)};
         document.getElementById('content').textContent = text;
         
-        window.renderMath = async () => {
+        window.renderMath = async (shouldGround) => {
             renderMathInElement(document.getElementById('content'), {
                 delimiters: [
                     {left: '$$', right: '$$', display: true},
@@ -129,6 +131,7 @@ async function latexToImage(text, outputPath, options = {}) {
             await new Promise(r => setTimeout(r, 50));
 
             const container = document.getElementById('container');
+            const containerRect = container.getBoundingClientRect();
             
             // Expand viewport to measure full content
             const allElements = container.querySelectorAll('*');
@@ -137,19 +140,43 @@ async function latexToImage(text, outputPath, options = {}) {
             
             allElements.forEach(el => {
                 const rect = el.getBoundingClientRect();
-                if (rect.right > maxRight) maxRight = rect.right;
-                if (rect.bottom > maxBottom) maxBottom = rect.bottom;
+                if (rect.width > 0 && rect.height > 0) {
+                    if (rect.right > maxRight) maxRight = rect.right;
+                    if (rect.bottom > maxBottom) maxBottom = rect.bottom;
+                }
             });
             
             // Fallback to container dimensions if no children found
-            const containerRect = container.getBoundingClientRect();
             maxRight = Math.max(maxRight, containerRect.right);
             maxBottom = Math.max(maxBottom, containerRect.bottom);
 
-            return {
+            const result = {
                 width: maxRight,
-                height: maxBottom
+                height: maxBottom,
+                symbols: []
             };
+
+            if (shouldGround) {
+                // Find all leaf elements that contain text in KaTeX
+                const elements = container.querySelectorAll('.katex .mord, .katex .mop, .katex .mbin, .katex .mrel, .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner');
+                elements.forEach(el => {
+                    if (el.children.length === 0 && el.textContent.trim().length > 0) {
+                        const rect = el.getBoundingClientRect();
+                        result.symbols.push({
+                            text: el.textContent.trim(),
+                            box: [
+                                Math.round(rect.left - containerRect.left),
+                                Math.round(rect.top - containerRect.top),
+                                Math.round(rect.width),
+                                Math.round(rect.height)
+                            ],
+                            type: Array.from(el.classList).find(c => c.startsWith('m')) || 'unknown'
+                        });
+                    }
+                });
+            }
+
+            return result;
         };
     </script>
 </body>
@@ -158,7 +185,7 @@ async function latexToImage(text, outputPath, options = {}) {
         await page.setContent(html);
 
         await page.waitForFunction(() => typeof renderMathInElement !== 'undefined');
-        const dimensions = await page.evaluate(() => window.renderMath());
+        const dimensions = await page.evaluate((g) => window.renderMath(g), grounded);
         
         // Match viewport to content
         await page.setViewport({
@@ -174,6 +201,17 @@ async function latexToImage(text, outputPath, options = {}) {
             path: outputPath,
             omitBackground: backgroundColor === 'transparent'
         });
+
+        // Save grounding data if requested
+        if (grounded && dimensions.symbols.length > 0) {
+            const metadataPath = outputPath.replace(/\.[^/.]+$/, "") + ".json";
+            fs.writeFileSync(metadataPath, JSON.stringify({
+                text,
+                image: path.basename(outputPath),
+                dimensions: { width: dimensions.width, height: dimensions.height },
+                symbols: dimensions.symbols
+            }, null, 2));
+        }
 
     } finally {
         await browser.close();

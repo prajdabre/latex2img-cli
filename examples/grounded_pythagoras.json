@@ -1,0 +1,90 @@
+{
+  "text": "Theorem: $$a^2 + b^2 = c^2$$",
+  "image": "grounded_pythagoras.png",
+  "dimensions": {
+    "width": 539.265625,
+    "height": 271.90625
+  },
+  "symbols": [
+    {
+      "text": "a",
+      "box": [
+        20,
+        151,
+        36,
+        64
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "2",
+      "box": [
+        56,
+        129,
+        24,
+        56
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "+",
+      "box": [
+        98,
+        139,
+        53,
+        79
+      ],
+      "type": "mbin"
+    },
+    {
+      "text": "b",
+      "box": [
+        166,
+        151,
+        29,
+        64
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "2",
+      "box": [
+        195,
+        129,
+        24,
+        56
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "=",
+      "box": [
+        241,
+        139,
+        53,
+        79
+      ],
+      "type": "mrel"
+    },
+    {
+      "text": "c",
+      "box": [
+        312,
+        151,
+        29,
+        64
+      ],
+      "type": "mord"
+    },
+    {
+      "text": "2",
+      "box": [
+        342,
+        129,
+        24,
+        56
+      ],
+      "type": "mord"
+    }
+  ]
+}
