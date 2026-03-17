@@ -1,0 +1,31 @@
+{
+  "text": "In calculus, we have the product rule: $$(uv)\\prime = u\\prime v + uv\\prime$$\nAdditionally, for the quotient rule: \n$$\\left(\\frac{u}{v}\\right)\\prime = \\frac{u\\prime v - uv\\prime}{v^2}$$\nThese are fundamental.",
+  "image": "multi_grounded_calculus.png",
+  "groundingLevel": "equation",
+  "dimensions": {
+    "width": 1008.125,
+    "height": 789.515625
+  },
+  "boxes": [
+    {
+      "text": "(uv)′=u′v+uv′(uv)\\prime = u\\prime v + uv\\prime(uv)′=u′v+uv′",
+      "box": [
+        20,
+        133,
+        968,
+        82
+      ],
+      "label": "equation"
+    },
+    {
+      "text": "(uv)′=u′v−uv′v2\\left(\\frac{u}{v}\\right)\\prime = \\frac{u\\prime v - uv\\prime}{v^2}(vu​)′=v2u′v−uv′​",
+      "box": [
+        20,
+        443,
+        968,
+        127
+      ],
+      "label": "equation"
+    }
+  ]
+}

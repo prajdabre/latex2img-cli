@@ -1,0 +1,51 @@
+{
+  "text": "Gauss Law:\n$$\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}$$\nGauss Law for Magnetism:\n$$\\nabla \\cdot \\mathbf{B} = 0$$\nFaraday Law:\n$$\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}$$\nAmpere Law:\n$$\\nabla \\times \\mathbf{B} = \\mu_0\\left(\\mathbf{J} + \\epsilon_0\\frac{\\partial \\mathbf{E}}{\\partial t}\\right)$$",
+  "image": "multi_grounded_maxwell.png",
+  "groundingLevel": "equation",
+  "dimensions": {
+    "width": 959.015625,
+    "height": 1310.53125
+  },
+  "boxes": [
+    {
+      "text": "∇⋅E=ρϵ0\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}∇⋅E=ϵ0​ρ​",
+      "box": [
+        20,
+        129,
+        695,
+        122
+      ],
+      "label": "equation"
+    },
+    {
+      "text": "∇⋅B=0\\nabla \\cdot \\mathbf{B} = 0∇⋅B=0",
+      "box": [
+        20,
+        470,
+        695,
+        78
+      ],
+      "label": "equation"
+    },
+    {
+      "text": "∇×E=−∂B∂t\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}∇×E=−∂t∂B​",
+      "box": [
+        20,
+        766,
+        695,
+        129
+      ],
+      "label": "equation"
+    },
+    {
+      "text": "∇×B=μ0(J+ϵ0∂E∂t)\\nabla \\times \\mathbf{B} = \\mu_0\\left(\\mathbf{J} + \\epsilon_0\\frac{\\partial \\mathbf{E}}{\\partial t}\\right)∇×B=μ0​(J+ϵ0​∂t∂E​)",
+      "box": [
+        20,
+        1114,
+        695,
+        151
+      ],
+      "label": "equation"
+    }
+  ]
+}
