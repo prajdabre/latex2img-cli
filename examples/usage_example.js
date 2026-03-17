@@ -1,4 +1,4 @@
-const latexToImage = require('./index');
+const latexToImage = require('../index');
 const path = require('path');
 
 async function run() {
@@ -16,7 +16,7 @@ $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
 Hope you like it!
     `;
 
-    const outputPath = path.join(__dirname, 'test_output.png');
+    const outputPath = path.join(__dirname, 'standard', 'usage_demo.png');
     
     console.log('Rendering LaTeX to image...');
     try {

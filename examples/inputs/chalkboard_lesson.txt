@@ -1,0 +1,3 @@
+Teacher Says:
+74490\int x^2 dx = \frac{x^3}{3} + C74490
+Dont forget the constant!

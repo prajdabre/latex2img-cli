@@ -66,15 +66,15 @@ This tool is designed for generating high-quality **grounded** synthetic trainin
 - **Artifact Synthesis**: Using `--noise` applies randomized jitter, skew, and ink-bleed effects to simulate messy handwriting or poor scanning conditions, perfect for testing model robustness.
 
 Example of debug output:
-![Debug Quadratic](examples/debug_quadratic.png)
+![Debug Quadratic](examples/debug/debug_quadratic.png)
 
 ### 🎨 Themes
 
 | Theme | Description | Preview |
 | :--- | :--- | :--- |
-| `modern` (default) | Clean, professional Inter font on white/transparent background. | [View](examples/basic_math.png) |
-| `handwritten` | Organic "Architects Daughter" font with a slight tilt and ink-blue color. | [View](examples/handwritten_secret.png) |
-| `chalkboard` | Classroom aesthetic with "Patrick Hand" font and slate-board background. | [View](examples/chalkboard_lesson.png) |
+| `modern` (default) | Clean, professional Inter font on white/transparent background. | [View](examples/standard/basic_math.png) |
+| `handwritten` | Organic "Architects Daughter" font with a slight tilt and ink-blue color. | [View](examples/standard/handwritten_secret.png) |
+| `chalkboard` | Classroom aesthetic with "Patrick Hand" font and slate-board background. | [View](examples/standard/chalkboard_lesson.png) |
 
 ### 2. Node.js Library
 
@@ -102,13 +102,18 @@ convert();
 
 | Description | Rendered Result | Input Text |
 | :--- | :--- | :--- |
-| **Basic Math** (Inline + Block) | ![Basic Math](examples/basic_math.png) | [Link](examples/inputs/basic_math.txt) |
-| **Calculus** (Integrals) | ![Calculus](examples/complex_calculus.png) | [Link](examples/inputs/complex_calculus.txt) |
-| **Linear Algebra** (Matrices) | ![Matrix Algebra](examples/matrix_algebra.png) | [Link](examples/inputs/matrix_algebra.txt) |
-| **Physics** (Standard Model) | ![Physics](examples/physics.png) | [Link](examples/inputs/physics.txt) |
-| **Chemistry** (Reactions) | ![Chemistry](examples/chemistry.png) | [Link](examples/inputs/chemistry.txt) |
-| **Stress Test** (Overflow/Wide) | ![Wide Equation](examples/wide_alphabet.png) | [Link](examples/inputs/wide_alphabet.txt) |
-| **Multi-line** (Lists/Notes) | ![Multi-line](examples/multi_line.png) | [Link](examples/inputs/multi_line.txt) |
+| **Basic Math** (Inline + Block) | ![Basic Math](examples/standard/basic_math.png) | [Link](examples/inputs/basic_math.txt) |
+| **Calculus** (Integrals) | ![Calculus](examples/standard/complex_calculus.png) | [Link](examples/inputs/complex_calculus.txt) |
+| **Linear Algebra** (Matrices) | ![Matrix Algebra](examples/standard/matrix_algebra.png) | [Link](examples/inputs/matrix_algebra.txt) |
+| **Physics** (Standard Model) | ![Physics](examples/standard/physics.png) | [Link](examples/inputs/physics.txt) |
+| **Chemistry** (Reactions) | ![Chemistry](examples/standard/chemistry.png) | [Link](examples/inputs/chemistry.txt) |
+| **Stress Test** (Overflow/Wide) | ![Wide Equation](examples/standard/wide_alphabet.png) | [Link](examples/inputs/wide_alphabet.txt) |
+| **Multi-line** (Lists/Notes) | ![Multi-line](examples/standard/multi_line.png) | [Link](examples/inputs/multi_line.txt) |
+| **Theorem** (Mixed Content) | ![Theorem](examples/standard/theorem.png) | [Link](examples/inputs/theorem.txt) |
+| **Quadratic** (Large Block) | ![Quadratic](examples/standard/quadratic_formula.png) | [Link](examples/inputs/quadratic_formula.txt) |
+| **Einstein** (Inline) | ![Einstein](examples/standard/einstein_energy.png) | [Link](examples/inputs/einstein_energy.txt) |
+| **Grounded** (Metadata) | ![Grounded](examples/grounded/grounded_quadratic.png) | [JSON](examples/grounded/grounded_quadratic.json) |
+| **Synthetic** (Noisy) | ![Synthetic](examples/synthetic/chaotic_math.png) | [JSON](examples/synthetic/chaotic_math.json) |
 
 ---
 
