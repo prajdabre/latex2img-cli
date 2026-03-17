@@ -1,5 +1,6 @@
 node_modules
 *.png
 !examples/**/*.png
+!experimental/**/*.png
 .DS_Store
 package-lock.json
