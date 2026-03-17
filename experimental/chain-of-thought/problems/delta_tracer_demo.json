@@ -1,0 +1,24 @@
+{
+  "steps": [
+    {
+      "label": "setup",
+      "text": "Solve for x:\n$$2x + \\textcolor{#e67e22}{5} = 10$$"
+    },
+    {
+      "label": "action",
+      "text": "Balance the equation:\n$$2x + 5 \\textcolor{#3498db}{- 5} = 10 \\textcolor{#3498db}{- 5}$$"
+    },
+    {
+      "label": "simplify",
+      "text": "Simplify both sides:\n$$2x = \\textcolor{#27ae60}{5}$$"
+    },
+    {
+      "label": "isolate",
+      "text": "Isolate x:\n$$x = \\textcolor{#3498db}{\\frac{5}{2}}$$"
+    },
+    {
+      "label": "final",
+      "text": "Final Result:\n$$x = \\textcolor{#27ae60}{2.5}$$"
+    }
+  ]
+}
