@@ -16,6 +16,7 @@ program
   .option('-b, --background <color>', 'Background color')
   .option('-t, --theme <string>', 'Theme (modern, handwritten, chalkboard)', 'modern')
   .option('-g, --grounded', 'Export symbol bounding boxes to JSON', false)
+  .option('-d, --debug', 'Draw bounding boxes for debugging', false)
   .action(async (input, options) => {
     let text = input;
     if (fs.existsSync(input)) {
@@ -32,7 +33,8 @@ program
             backgroundColor: options.background,
             width: options.width,
             theme: options.theme,
-            grounded: options.grounded
+            grounded: options.grounded,
+            debug: options.debug
         });
         console.log('Done!');
     } catch (err) {

@@ -13,6 +13,7 @@ const path = require('path');
  * @param {number} options.width - Optional fixed width in pixels.
  * @param {string} options.theme - Theme: 'modern', 'handwritten', or 'chalkboard' (default: 'modern').
  * @param {boolean} options.grounded - If true, extracts bounding boxes for every symbol (default: false).
+ * @param {boolean} options.debug - If true, visually draws bounding boxes on the image (default: false).
  */
 async function latexToImage(text, outputPath, options = {}) {
     const {
@@ -21,7 +22,8 @@ async function latexToImage(text, outputPath, options = {}) {
         backgroundColor: userBgColor,
         width: fixedWidth,
         theme = 'modern',
-        grounded = false
+        grounded = false,
+        debug = false
     } = options;
 
     const browser = await puppeteer.launch({
@@ -115,7 +117,7 @@ async function latexToImage(text, outputPath, options = {}) {
         const text = ${JSON.stringify(text)};
         document.getElementById('content').textContent = text;
         
-        window.renderMath = async (shouldGround) => {
+        window.renderMath = async (shouldGround, shouldDebug) => {
             renderMathInElement(document.getElementById('content'), {
                 delimiters: [
                     {left: '$$', right: '$$', display: true},
@@ -156,24 +158,66 @@ async function latexToImage(text, outputPath, options = {}) {
                 symbols: []
             };
 
-            if (shouldGround) {
-                // Find all leaf elements that contain text in KaTeX
+            const drawBox = (rect, color, label) => {
+                const box = document.createElement('div');
+                box.style.position = 'absolute';
+                box.style.left = (rect.left - containerRect.left) + 'px';
+                box.style.top = (rect.top - containerRect.top) + 'px';
+                box.style.width = rect.width + 'px';
+                box.style.height = rect.height + 'px';
+                box.style.border = '1.5px solid ' + color;
+                box.style.boxSizing = 'border-box';
+                box.style.pointerEvents = 'none';
+                box.style.zIndex = '9999';
+                if (label) {
+                    const l = document.createElement('span');
+                    l.textContent = label;
+                    l.style.position = 'absolute';
+                    l.style.top = '-14px';
+                    l.style.left = '0';
+                    l.style.fontSize = '10px';
+                    l.style.background = color;
+                    l.style.color = 'white';
+                    l.style.padding = '0 2px';
+                    box.appendChild(l);
+                }
+                container.appendChild(box);
+            };
+
+            if (shouldGround || shouldDebug) {
+                // Grounding logic
                 const elements = container.querySelectorAll('.katex .mord, .katex .mop, .katex .mbin, .katex .mrel, .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner');
                 elements.forEach(el => {
                     if (el.children.length === 0 && el.textContent.trim().length > 0) {
                         const rect = el.getBoundingClientRect();
-                        result.symbols.push({
-                            text: el.textContent.trim(),
-                            box: [
-                                Math.round(rect.left - containerRect.left),
-                                Math.round(rect.top - containerRect.top),
-                                Math.round(rect.width),
-                                Math.round(rect.height)
-                            ],
-                            type: Array.from(el.classList).find(c => c.startsWith('m')) || 'unknown'
-                        });
+                        if (rect.width > 0 && rect.height > 0) {
+                            if (shouldGround) {
+                                result.symbols.push({
+                                    text: el.textContent.trim(),
+                                    box: [
+                                        Math.round(rect.left - containerRect.left),
+                                        Math.round(rect.top - containerRect.top),
+                                        Math.round(rect.width),
+                                        Math.round(rect.height)
+                                    ],
+                                    type: Array.from(el.classList).find(c => c.startsWith('m')) || 'unknown'
+                                });
+                            }
+                            if (shouldDebug) {
+                                drawBox(rect, 'rgba(231, 76, 60, 0.8)'); // Red for symbols
+                            }
+                        }
                     }
                 });
+
+                if (shouldDebug) {
+                    // Equation level grounding (blue boxes)
+                    const equations = container.querySelectorAll('.katex-display, .katex:not(.katex-display .katex)');
+                    equations.forEach(eq => {
+                        const rect = eq.getBoundingClientRect();
+                        drawBox(rect, 'rgba(52, 152, 219, 0.9)', 'equation');
+                    });
+                }
             }
 
             return result;
@@ -185,7 +229,7 @@ async function latexToImage(text, outputPath, options = {}) {
         await page.setContent(html);
 
         await page.waitForFunction(() => typeof renderMathInElement !== 'undefined');
-        const dimensions = await page.evaluate((g) => window.renderMath(g), grounded);
+        const dimensions = await page.evaluate((g, d) => window.renderMath(g, d), grounded, debug);
         
         // Match viewport to content
         await page.setViewport({

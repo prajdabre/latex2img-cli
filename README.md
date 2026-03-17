@@ -53,6 +53,18 @@ latex2img 'The mass-energy equivalence: $E = mc^2$' -o output.png -s 32 -w 600
 - `-w, --width <number>`: Fixed width for text wrapping
 - `-b, --background <color>`: Custom background color (CSS value)
 - `-t, --theme <name>`: Theme choice (`modern`, `handwritten`, `chalkboard`)
+- `-g, --grounded`: Extract symbol-level bounding boxes to a `.json` file
+- `-d, --debug`: Visually render bounding boxes on the output image
+
+### 🔬 Grounded STEM Training Data
+
+This tool is designed for generating high-quality **grounded** synthetic training data for STEM OCR models.
+
+- **JSON Metadata**: Using `--grounded` produces a JSON file mapping every symbol to its precise `[x, y, w, h]` coordinates.
+- **Debug View**: Using `--debug` renders those boxes (red for characters, blue for equations) directly on the image for verification.
+
+Example of debug output:
+![Debug Quadratic](examples/debug_quadratic.png)
 
 ### 🎨 Themes
 
