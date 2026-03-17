@@ -1,0 +1,32 @@
+[
+  {
+    "step": 1,
+    "description": "Initial equation",
+    "image": "step_01.png",
+    "text": "Solve for $x$:\n$$2x + 5 = 15$$"
+  },
+  {
+    "step": 2,
+    "description": "Subtracting 5",
+    "image": "step_02.png",
+    "text": "Subtract 5 from both sides:\n$$2x + 5 \\highlight{- 5} = 15 \\highlight{- 5}$$"
+  },
+  {
+    "step": 3,
+    "description": "Simplification",
+    "image": "step_03.png",
+    "text": "Simplify:\n$$2x = \\highlight{10}$$"
+  },
+  {
+    "step": 4,
+    "description": "Division",
+    "image": "step_04.png",
+    "text": "Divide by 2:\n$$\\frac{2x}{\\highlight{2}} = \\frac{10}{\\highlight{2}}$$"
+  },
+  {
+    "step": 5,
+    "description": "Solved",
+    "image": "step_05.png",
+    "text": "Final answer:\n$$x = \\result{5}$$"
+  }
+]
