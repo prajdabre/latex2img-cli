@@ -17,6 +17,7 @@ program
   .option('-t, --theme <string>', 'Theme (modern, handwritten, chalkboard)', 'modern')
   .option('-g, --grounded [level]', 'Export bounding boxes to JSON (char, equation)')
   .option('-d, --debug [level]', 'Draw bounding boxes for debugging (char, equation)')
+  .option('-n, --noise <number>', 'Noise level for artifact synthesis (0.0 to 1.0)', parseFloat, 0)
   .action(async (input, options) => {
     let text = input;
     if (fs.existsSync(input)) {
@@ -34,7 +35,8 @@ program
             width: options.width,
             theme: options.theme,
             grounded: options.grounded,
-            debug: options.debug
+            debug: options.debug,
+            noise: options.noise
         });
         console.log('Done!');
     } catch (err) {

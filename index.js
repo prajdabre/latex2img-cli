@@ -14,6 +14,7 @@ const path = require('path');
  * @param {string} options.theme - Theme: 'modern', 'handwritten', or 'chalkboard' (default: 'modern').
  * @param {boolean|string} options.grounded - Extraction level: 'char', 'equation', or false (default: false).
  * @param {boolean|string} options.debug - Visual debug level: 'char', 'equation', or false (default: false).
+ * @param {number} options.noise - Noise level from 0 to 1 (default: 0).
  */
 async function latexToImage(text, outputPath, options = {}) {
     const {
@@ -23,7 +24,8 @@ async function latexToImage(text, outputPath, options = {}) {
         width: fixedWidth,
         theme = 'modern',
         grounded = false,
-        debug = false
+        debug = false,
+        noise = 0
     } = options;
 
     const browser = await puppeteer.launch({
@@ -110,6 +112,21 @@ async function latexToImage(text, outputPath, options = {}) {
 </head>
 
 <body>
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="inkBleed">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.4" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="glow" />
+            <feComposite in="SourceGraphic" in2="glow" operator="over" />
+        </filter>
+        <filter id="dirtyScan">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+            <feColorMatrix in="noise" type="saturate" values="0" result="destat" />
+            <feComponentTransfer in="destat" result="alpha">
+                <feFuncA type="linear" slope="0.1" />
+            </feComponentTransfer>
+            <feBlend in="SourceGraphic" in2="alpha" mode="multiply" />
+        </filter>
+    </svg>
     <div id="container">
         <div id="content"></div>
     </div>
@@ -117,7 +134,7 @@ async function latexToImage(text, outputPath, options = {}) {
         const text = ${JSON.stringify(text)};
         document.getElementById('content').textContent = text;
         
-        window.renderMath = async (shouldGround, shouldDebug) => {
+        window.renderMath = async (shouldGround, shouldDebug, noiseLevel) => {
             renderMathInElement(document.getElementById('content'), {
                 delimiters: [
                     {left: '$$', right: '$$', display: true},
@@ -133,6 +150,51 @@ async function latexToImage(text, outputPath, options = {}) {
             await new Promise(r => setTimeout(r, 50));
 
             const container = document.getElementById('container');
+            const content = document.getElementById('content');
+
+            // Apply noise if requested
+            if (noiseLevel > 0) {
+                const intensity = parseFloat(noiseLevel);
+                
+                // 1. Global distortions
+                const globalRot = (Math.random() - 0.5) * 2 * intensity; // -intensity to +intensity deg
+                const globalSkew = (Math.random() - 0.5) * intensity;
+                container.style.transform = 'rotate(' + globalRot + 'deg) skew(' + globalSkew + 'deg)';
+                
+                // 2. Individual symbol jitter
+                const symbols = container.querySelectorAll('.katex .mord, .katex .mop, .katex .mbin, .katex .mrel, .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner');
+                symbols.forEach(s => {
+                    if (s.children.length === 0) {
+                        const sRot = (Math.random() - 0.5) * 10 * intensity;
+                        const sScale = 1 + (Math.random() - 0.5) * 0.1 * intensity;
+                        const sY = (Math.random() - 0.5) * 4 * intensity;
+                        const sX = (Math.random() - 0.5) * 2 * intensity;
+                        s.style.display = 'inline-block';
+                        s.style.transform = 'translate(' + sX + 'px, ' + sY + 'px) rotate(' + sRot + 'deg) scale(' + sScale + ')';
+                        s.style.opacity = 1 - (Math.random() * 0.2 * intensity);
+                    }
+                });
+
+                // 3. Filters for bad scan look
+                let filters = [];
+                if (Math.random() < 0.5 * intensity) filters.push('blur(' + (Math.random() * 0.5 * intensity) + 'px)');
+                if (Math.random() < intensity) filters.push('contrast(' + (1 + (Math.random() - 0.5) * 0.5 * intensity) + ')');
+                if (Math.random() < intensity) filters.push('brightness(' + (1 + (Math.random() - 0.5) * 0.3 * intensity) + ')');
+                
+                // Ink bleed SVG filter
+                if (Math.random() < 0.8 * intensity) {
+                    content.style.filter = 'url(#inkBleed) ' + filters.join(' ');
+                } else {
+                    content.style.filter = filters.join(' ');
+                }
+
+                // Global dirt/scan filter
+                if (Math.random() < 0.3 * intensity) {
+                    container.style.filter = 'url(#dirtyScan)';
+                }
+            }
+            
+            await new Promise(r => setTimeout(r, 50));
             const containerRect = container.getBoundingClientRect();
             
             // Expand viewport to measure full content
@@ -252,7 +314,7 @@ async function latexToImage(text, outputPath, options = {}) {
         await page.setContent(html);
 
         await page.waitForFunction(() => typeof renderMathInElement !== 'undefined');
-        const dimensions = await page.evaluate((g, d) => window.renderMath(g, d), grounded, debug);
+        const dimensions = await page.evaluate((g, d, n) => window.renderMath(g, d, n), grounded, debug, noise);
         
         // Match viewport to content
         await page.setViewport({
@@ -276,6 +338,7 @@ async function latexToImage(text, outputPath, options = {}) {
                 text,
                 image: path.basename(outputPath),
                 groundingLevel: grounded === true ? 'char' : grounded,
+                noiseLevel: noise,
                 dimensions: { width: dimensions.width, height: dimensions.height },
                 boxes: dimensions.boxes
             }, null, 2));

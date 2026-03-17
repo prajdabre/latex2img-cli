@@ -55,6 +55,7 @@ latex2img 'The mass-energy equivalence: $E = mc^2$' -o output.png -s 32 -w 600
 - `-t, --theme <name>`: Theme choice (`modern`, `handwritten`, `chalkboard`)
 - `-g, --grounded [level]`: Extract boxes to `.json` (`char` or `equation`)
 - `-d, --debug [level]`: Render boxes on image (`char` or `equation`)
+- `-n, --noise <0-1>`: Apply artifact synthesis (blur, jitter, ink bleed)
 
 ### 🔬 Grounded STEM Training Data
 
@@ -62,6 +63,7 @@ This tool is designed for generating high-quality **grounded** synthetic trainin
 
 - **JSON Metadata**: Using `--grounded` produces a JSON file mapping every symbol to its precise `[x, y, w, h]` coordinates.
 - **Debug View**: Using `--debug` renders those boxes (red for characters, blue for equations) directly on the image for verification.
+- **Artifact Synthesis**: Using `--noise` applies randomized jitter, skew, and ink-bleed effects to simulate messy handwriting or poor scanning conditions, perfect for testing model robustness.
 
 Example of debug output:
 ![Debug Quadratic](examples/debug_quadratic.png)

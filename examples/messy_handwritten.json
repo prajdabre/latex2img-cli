@@ -1,0 +1,72 @@
+{
+  "text": "Messy Equation: $$y = mx + b$$",
+  "image": "messy_handwritten.png",
+  "groundingLevel": "char",
+  "noiseLevel": 0.5,
+  "dimensions": {
+    "width": 252.80145263671875,
+    "height": 139.76967054605484
+  },
+  "boxes": [
+    {
+      "text": "y",
+      "box": [
+        40,
+        73,
+        16,
+        36
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "=",
+      "box": [
+        63,
+        70,
+        24,
+        36
+      ],
+      "label": "mrel"
+    },
+    {
+      "text": "m",
+      "box": [
+        94,
+        72,
+        27,
+        36
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "x",
+      "box": [
+        119,
+        72,
+        18,
+        36
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "+",
+      "box": [
+        142,
+        69,
+        24,
+        36
+      ],
+      "label": "mbin"
+    },
+    {
+      "text": "b",
+      "box": [
+        171,
+        73,
+        14,
+        35
+      ],
+      "label": "mord"
+    }
+  ]
+}

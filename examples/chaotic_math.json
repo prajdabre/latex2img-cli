@@ -1,0 +1,132 @@
+{
+  "text": "Very Messy: $$\\int_{0}^{\\infty} e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$",
+  "image": "chaotic_math.png",
+  "groundingLevel": "char",
+  "noiseLevel": 0.8,
+  "dimensions": {
+    "width": 11839.267303466797,
+    "height": 195.26608276367188
+  },
+  "boxes": [
+    {
+      "text": "∫",
+      "box": [
+        20,
+        89,
+        17,
+        35
+      ],
+      "label": "mop"
+    },
+    {
+      "text": "0",
+      "box": [
+        35,
+        124,
+        11,
+        24
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "∞",
+      "box": [
+        50,
+        63,
+        21,
+        24
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "e",
+      "box": [
+        75,
+        91,
+        14,
+        35
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "−",
+      "box": [
+        90,
+        84,
+        16,
+        25
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "x",
+      "box": [
+        106,
+        86,
+        12,
+        25
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "2",
+      "box": [
+        118,
+        81,
+        7,
+        17
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "d",
+      "box": [
+        127,
+        91,
+        18,
+        37
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "x",
+      "box": [
+        142,
+        90,
+        18,
+        35
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "=",
+      "box": [
+        167,
+        87,
+        24,
+        35
+      ],
+      "label": "mrel"
+    },
+    {
+      "text": "2",
+      "box": [
+        215,
+        108,
+        15,
+        35
+      ],
+      "label": "mord"
+    },
+    {
+      "text": "π",
+      "box": [
+        226,
+        73,
+        17,
+        34
+      ],
+      "label": "mord"
+    }
+  ]
+}
